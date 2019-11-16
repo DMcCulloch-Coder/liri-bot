@@ -45,16 +45,18 @@ switch (command) {
         })
         break;
     case "spotify-this-song":
-        if (commandData) {
-            let song = commandData.toLowerCase().split(' ').join('+')
-        } else {
-            let song = "the+sign"
-        }
+        let song;
+        commandData ? song = commandData.toLowerCase().split(' ').join('+') : song = "the+sign";
+        
         spotify.search({ type: 'track', query: song}, function (err, data) {
             if (err) {
                 return console.log(`Spotify Error: ${err}`)
             }
-            console.log(data);
+            //console.log(data.tracks.items[0]);
+            console.log("Artist Name: " + data.tracks.items[0].artists[0].name);
+            console.log("Album Name: " + data.tracks.items[0].album.name)
+            console.log("Song Name: " + data.tracks.items[0].name);
+            console.log("Song Preview Link: " + data.tracks.items[0].preview_url);
         })
         break;
     case "movie-this":
