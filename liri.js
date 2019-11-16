@@ -60,7 +60,31 @@ switch (command) {
         })
         break;
     case "movie-this":
-        console.log("movie-this")
+        let movie = commandData.toLowerCase().split(' ').join('+');
+        axios.get(`http://www.omdbapi.com/?apikey=trilogy&i=tt0076759` )
+        .then(function(response) {
+            axios.get(`http://www.omdbapi.com/?apikey=trilogy&i=${response.data.imdbID}` )
+            .then(function(response) {
+                console.log(response)
+                console.log(`Title: ${response.data.Title}`)
+                console.log(`Year of Release: ${response.data.Year}`)
+                console.log(`Rated: ${response.data.Rated}`)
+                console.log(`Rotten Tomatoes Rating: ${response.data.Ratings[1].Value}`)
+                console.log(`Country: ${response.data.Country}`)
+                console.log(`Plot: ${response.data.Plot}`)
+                let actors;
+                let actorArray = response.data.Actors
+                actorArray = actorArray.split(',');
+                for (let i = 0; i < actorArray.length; i++) {
+                    if (i === 0) {
+                        actors = actorArray[i]
+                    } else {
+                        actors = actors + ", " + actorArray[i]
+                    }
+                }
+                console.log(`Actor(s): ${actors}`)
+            })
+        })
         break;
     
 }
