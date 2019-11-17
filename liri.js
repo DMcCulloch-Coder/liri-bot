@@ -61,11 +61,10 @@ switch (command) {
         break;
     case "movie-this":
         let movie = commandData.toLowerCase().split(' ').join('+');
-        axios.get(`http://www.omdbapi.com/?apikey=trilogy&i=tt0076759` )
+        axios.get(`http://www.omdbapi.com/?apikey=trilogy&t=${movie}` )
         .then(function(response) {
             axios.get(`http://www.omdbapi.com/?apikey=trilogy&i=${response.data.imdbID}` )
             .then(function(response) {
-                console.log(response)
                 console.log(`Title: ${response.data.Title}`)
                 console.log(`Year of Release: ${response.data.Year}`)
                 console.log(`Rated: ${response.data.Rated}`)
