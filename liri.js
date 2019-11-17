@@ -45,20 +45,45 @@ switch (command) {
         })
         break;
     case "spotify-this-song":
-        if (commandData) {
-            let song = commandData.toLowerCase().split(' ').join('+')
-        } else {
-            let song = "the+sign"
-        }
+        let song;
+        commandData ? song = commandData.toLowerCase().split(' ').join('+') : song = "the+sign";
+        
         spotify.search({ type: 'track', query: song}, function (err, data) {
             if (err) {
                 return console.log(`Spotify Error: ${err}`)
             }
-            console.log(data);
+            //console.log(data.tracks.items[0]);
+            console.log("Artist Name: " + data.tracks.items[0].artists[0].name);
+            console.log("Album Name: " + data.tracks.items[0].album.name)
+            console.log("Song Name: " + data.tracks.items[0].name);
+            console.log("Song Preview Link: " + data.tracks.items[0].preview_url);
         })
         break;
     case "movie-this":
-        console.log("movie-this")
+        let movie = commandData.toLowerCase().split(' ').join('+');
+        axios.get(`http://www.omdbapi.com/?apikey=trilogy&t=${movie}` )
+        .then(function(response) {
+            axios.get(`http://www.omdbapi.com/?apikey=trilogy&i=${response.data.imdbID}` )
+            .then(function(response) {
+                console.log(`Title: ${response.data.Title}`)
+                console.log(`Year of Release: ${response.data.Year}`)
+                console.log(`Rated: ${response.data.Rated}`)
+                console.log(`Rotten Tomatoes Rating: ${response.data.Ratings[1].Value}`)
+                console.log(`Country: ${response.data.Country}`)
+                console.log(`Plot: ${response.data.Plot}`)
+                let actors;
+                let actorArray = response.data.Actors
+                actorArray = actorArray.split(',');
+                for (let i = 0; i < actorArray.length; i++) {
+                    if (i === 0) {
+                        actors = actorArray[i]
+                    } else {
+                        actors = actors + ", " + actorArray[i]
+                    }
+                }
+                console.log(`Actor(s): ${actors}`)
+            })
+        })
         break;
     
 }
